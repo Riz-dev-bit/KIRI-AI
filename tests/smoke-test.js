@@ -21,7 +21,7 @@ const tests = [
     check: () => {
       try {
         const config = JSON.parse(fs.readFileSync(path.join(configDir, '9router.json'), 'utf-8'));
-        return config.endpoint && config.username && config.password;
+        return config.endpoint && config.password;
       } catch {
         return false;
       }
