@@ -1,0 +1,38 @@
+# Sensitive configuration files
+config/gsuite.txt
+config/password-gsuite.txt
+config/gmail.txt
+config/proxy.txt
+config/9router.json
+.env
+
+# Logs and output
+*.log
+logs/
+output/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Playwright
+playwright/.cache/
+.playwright/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.old
+*.backup

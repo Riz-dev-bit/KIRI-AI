@@ -1,0 +1,7 @@
+# Example GSuite accounts
+# Format: one email per line
+# Lines starting with # are ignored
+
+# user1@yourdomain.com
+# user2@yourdomain.com
+# user3@yourdomain.com

@@ -1,0 +1,45 @@
+{
+  "name": "kiri-ai",
+  "version": "1.0.0",
+  "description": "Automated Kiri IDE account provisioning via Google SSO with token aggregation to 9Router",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node tests/smoke-test.js",
+    "dev": "HEADLESS=false node src/index.js"
+  },
+  "keywords": [
+    "kiri",
+    "kiri-ai",
+    "automation",
+    "sso",
+    "google-sso",
+    "playwright",
+    "token-extraction",
+    "9router",
+    "oauth",
+    "cognito"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "dotenv": "^17.4.2",
+    "otpauth": "^9.3.6",
+    "playwright": "^1.60.0",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/KIRI-AI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/KIRI-AI/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/KIRI-AI#readme"
+}
