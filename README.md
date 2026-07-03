@@ -27,15 +27,20 @@ cd KIRI-AI
 # 2. Install dependencies
 npm install
 
-# 3. Configure accounts
+# 3. Create config files from examples
+cp gsuite.example.txt gsuite.txt
+cp password-gsuite.example.txt password-gsuite.txt
+cp 9router.example.json 9router.json
+
+# 4. Edit config files
 nano gsuite.txt           # Add GSuite emails (one per line)
 nano password-gsuite.txt  # Add shared password
 nano 9router.json         # Configure 9Router endpoint (optional)
 
-# 4. Extract tokens
+# 5. Extract tokens
 node index.js             # Outputs to kiro-tokens.json
 
-# 5. Auto-import to 9Router
+# 6. Auto-import to 9Router
 node import-to-9router.js # Injects directly to database
 pkill -f 9router && 9router  # Restart 9Router to reload
 ```
@@ -86,18 +91,20 @@ INSERT INTO providerConnections (
 ```bash
 # Prepare full account list
 cat > gsuite.txt << EOF
-# Paste all 238 accounts here (one per line)
 account1@bukitsakura.com
 account2@bukitsakura.com
 ...
 account228@cindohub.com
 EOF
 
-# Run extraction (estimated time: ~3 hours for 238 accounts @ 30s/account)
+# Run extraction (estimated time: ~2-3 hours for 238 accounts @ 30-45s/account)
 node index.js
 
-# Import to 9Router
+# Import to 9Router (instant)
 node import-to-9router.js
+
+# Restart 9Router to load new connections
+pkill -f 9router && 9router
 
 # Verify in 9Router dashboard
 open http://localhost:20128
@@ -107,25 +114,27 @@ open http://localhost:20128
 
 ## 🔧 Configuration Files
 
-### `gsuite.txt` — GSuite Accounts
+### `gsuite.txt` — GSuite Accounts (one per line)
 ```
 lqvkhorjoaksita@cindohub.com
 maduratzdsytpna@cindohub.com
 jaxjcibfxdya@cindohub.com
 ```
 
-### `password-gsuite.txt` — Shared Password
+### `password-gsuite.txt` — Shared Password (single line)
 ```
-Agent123zzx
+YourSecurePassword123
 ```
 
-### `9router.json` — 9Router Config (optional for extraction only)
+### `9router.json` — 9Router Config (optional for extraction)
 ```json
 {
   "endpoint": "http://localhost:20128",
-  "password": "rijik123zzx"
+  "password": "your_9router_password"
 }
 ```
+
+**Note:** The `9router.json` config is NOT required for token extraction. It's only used if you enable the legacy router import method (which is now superseded by `import-to-9router.js`).
 
 ---
 
