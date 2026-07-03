@@ -26,11 +26,11 @@ async function main() {
       logger.error('Configuration validation failed - please check your config files');
       process.exit(1);
     }
-
-    const gsuiteEmails = configLoader.loadGSuiteEmails();
+    // Load all configs
+    const gsuiteEmails = configLoader.loadGSuiteConfig();
     const gsuitePassword = configLoader.loadGSuitePassword();
-    const gmailAccounts = configLoader.loadGmailAccounts();
-    const proxies = configLoader.loadProxies();
+    const gmailAccounts = configLoader.loadGmailConfig();
+    const proxies = configLoader.loadProxyConfig();
     const routerConfig = configLoader.load9RouterConfig();
 
     // Initialize services
