@@ -136,12 +136,12 @@ class ConfigLoader {
     try {
       const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
       
-      if (!config.endpoint || !config.username || !config.password) {
-        logger.error('9Router config is incomplete - missing endpoint, username, or password');
+      if (!config.endpoint || !config.password) {
+        logger.error('Router config is incomplete - missing endpoint or password');
         return null;
       }
 
-      logger.success(`9Router configured: ${config.endpoint}`);
+      logger.success(`Router configured: ${config.endpoint}`);
       return config;
     } catch (error) {
       logger.error('Failed to parse 9router.json', { error: error.message });

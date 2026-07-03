@@ -11,7 +11,6 @@ const logger = new Logger('9Router');
 class RouterClient {
   constructor(config) {
     this.endpoint = config.endpoint;
-    this.username = config.username;
     this.password = config.password;
     this.authToken = null;
   }
@@ -70,10 +69,9 @@ class RouterClient {
    */
   async authenticate() {
     try {
-      logger.info('Authenticating with 9Router...');
+      logger.info('Authenticating with router...');
       
       const response = await this._request('POST', '/api/auth/login', {
-        username: this.username,
         password: this.password
       });
 
@@ -83,10 +81,10 @@ class RouterClient {
         throw new Error('No token in authentication response');
       }
 
-      logger.success('9Router authentication successful');
+      logger.success('Router authentication successful');
       return this.authToken;
     } catch (error) {
-      logger.error('9Router authentication failed', { error: error.message });
+      logger.error('Router authentication failed', { error: error.message });
       throw error;
     }
   }
@@ -107,7 +105,7 @@ class RouterClient {
       // Response format may vary - handle both array and object with data property
       const tokens = Array.isArray(response) ? response : (response.data || []);
       
-      logger.info(`Found ${tokens.length} existing tokens in 9Router`);
+      logger.info(`Found ${tokens.length} existing tokens in router`);
       return tokens;
     } catch (error) {
       logger.warn('Failed to fetch existing tokens - assuming empty', { error: error.message });
@@ -116,7 +114,7 @@ class RouterClient {
   }
 
   /**
-   * Check if email already exists in 9Router
+   * Check if email already exists in router
    * @param {string} email - Email to check
    * @param {Array} existingTokens - Cached list of existing tokens
    * @returns {boolean}
