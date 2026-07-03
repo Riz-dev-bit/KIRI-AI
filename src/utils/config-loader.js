@@ -121,8 +121,8 @@ class ConfigLoader {
   }
 
   /**
-   * Load 9Router configuration from 9router.json
-   * @returns {{endpoint: string, username: string, password: string}|null}
+   * Load 9router.json config
+   * @returns {{endpoint: string, password: string}|null}
    */
   load9RouterConfig() {
     const filePath = path.join(this.configDir, '9router.json');
