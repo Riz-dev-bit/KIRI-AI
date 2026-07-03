@@ -6,12 +6,12 @@
 
 require('dotenv').config();
 
-const ConfigLoader = require('./src/utils/config-loader');
-const BrowserManager = require('./src/utils/browser');
-const RouterClient = require('./src/utils/router');
-const GSuiteProvider = require('./src/providers/gsuite');
-const GmailProvider = require('./src/providers/gmail');
-const Logger = require('./src/utils/logger');
+const ConfigLoader = require('./utils/config-loader');
+const BrowserManager = require('./utils/browser');
+const RouterClient = require('./utils/router');
+const GSuiteProvider = require('./providers/gsuite');
+const GmailProvider = require('./providers/gmail');
+const Logger = require('./utils/logger');
 
 const logger = new Logger('Main');
 
