@@ -2,11 +2,11 @@
   "name": "kiri-ai",
   "version": "1.0.0",
   "description": "Automated workflow tool for managing cloud IDE access tokens with OAuth integration",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "node tests/smoke-test.js",
-    "dev": "HEADLESS=false node src/index.js"
+    "start": "node index.js",
+    "dev": "HEADLESS=false node index.js",
+    "test": "node docs/.tests/smoke-test.js"
   },
   "keywords": [
     "oauth-automation",

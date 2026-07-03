@@ -1,0 +1,6 @@
+# GSuite Email List
+# One email per line
+# Example:
+# user1@yourdomain.com
+# user2@yourdomain.com
+# user3@yourdomain.com

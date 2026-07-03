@@ -1,0 +1,11 @@
+# Gmail Account List (COMING SOON)
+# Format: email|password|2fa_secret
+# 2FA secret is optional (leave empty if no 2FA)
+# 
+# Examples:
+# user1@gmail.com|password123|JBSWY3DPEHPK3PXP
+# user2@gmail.com|password456|
+# user3@gmail.com|password789|ABCD1234EFGH5678
+#
+# Note: Gmail support is planned but not yet implemented.
+# Focus on GSuite accounts for now.

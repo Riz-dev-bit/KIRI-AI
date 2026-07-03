@@ -1,0 +1,14 @@
+# Proxy List (Optional)
+# One proxy per line
+# Supported formats:
+# - http://user:pass@host:port
+# - https://user:pass@host:port
+# - socks5://user:pass@host:port
+#
+# Examples:
+# http://username:password@proxy.example.com:8080
+# socks5://user:pass@192.168.1.100:1080
+#
+# Smart rotation:
+# - Multiple proxies = round-robin across accounts
+# - Single proxy = reuse (supports rotating residential proxies)

@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const configDir = path.join(__dirname, '../config');
+const configDir = path.join(process.cwd());
 
 const tests = [
   {
