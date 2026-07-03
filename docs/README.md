@@ -39,10 +39,10 @@ Streamline OAuth token management for cloud development environments using Googl
 
 ## 📦 Prerequisites
 
-- **Node.js** >= 16.0.0
-- **Token Router** instance (self-hosted or cloud deployment)
-- **Google Workspace accounts** with shared credentials
-- Optional: **Proxy infrastructure** (residential or datacenter)
+- Node.js >= 16.0.0
+- 9Router instance (self-hosted or cloud deployment)
+- Google Workspace accounts with shared credentials
+- Optional: Proxy infrastructure (residential or datacenter)
 
 ---
 
