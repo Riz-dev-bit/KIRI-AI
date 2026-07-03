@@ -2,9 +2,9 @@
 
 ![Node.js](https://img.shields.io/badge/node-%3E%3D16-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![Status](https://img.shields.io/badge/status-active-success)
 
-**Automated Kiri IDE account provisioning via Google SSO with token aggregation to 9Router**
+**Automated workflow tool for managing cloud IDE access tokens with OAuth integration**
 
-Scale your Kiri IDE access by automating account registration and token extraction from Google Workspace (GSuite) accounts. Aggregate refresh tokens into your 9Router instance for unified API access.
+Streamline OAuth token management for cloud development environments using Google Workspace accounts. Centralize access tokens through a routing layer for unified API operations.
 
 ---
 
@@ -15,7 +15,7 @@ Scale your Kiri IDE access by automating account registration and token extracti
 - [Installation](#-installation)
 - [Configuration](#-configuration)
 - [Usage](#-usage)
-- [How It Works](#-how-it-works)
+- [Architecture](#-architecture)
 - [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
 - [Disclaimer](#%EF%B8%8F-disclaimer)
@@ -25,24 +25,24 @@ Scale your Kiri IDE access by automating account registration and token extracti
 
 ## ✨ Features
 
-- ✅ **GSuite SSO Automation** - Automated Google Workspace authentication
-- ✅ **Token Extraction** - Extract Kiri IDE refresh tokens from AWS Cognito
-- ✅ **9Router Integration** - Direct import to your 9Router instance
-- ✅ **Deduplication** - Automatic skip of already-imported accounts
-- ✅ **Proxy Support** - Round-robin or single rotating proxy
-- ✅ **Progress Tracking** - Real-time console output with progress bars
-- ✅ **Error Recovery** - Per-account error handling, continue on failure
-- ✅ **Stealth Mode** - Playwright with anti-detection plugins
-- 🚧 **Gmail Support** - Coming soon (contributions welcome!)
+- ✅ **OAuth SSO Automation** - Automated Google Workspace authentication flows
+- ✅ **Token Management** - Extract and manage OAuth refresh tokens from cloud platforms
+- ✅ **Routing Integration** - Direct import to token routing services
+- ✅ **Deduplication** - Automatic skip of previously processed accounts
+- ✅ **Proxy Support** - Round-robin or single rotating proxy configurations
+- ✅ **Progress Tracking** - Real-time console output with detailed logging
+- ✅ **Error Recovery** - Per-account error handling with continuation logic
+- ✅ **Stealth Mode** - Browser automation with anti-detection capabilities
+- 🚧 **Gmail Support** - Personal account support (contributions welcome!)
 
 ---
 
 ## 📦 Prerequisites
 
 - **Node.js** >= 16.0.0
-- **9Router** instance (self-hosted or cloud)
-- **Google Workspace accounts** (GSuite) with shared password
-- Optional: **Proxy servers** (residential rotating or datacenter)
+- **Token Router** instance (self-hosted or cloud deployment)
+- **Google Workspace accounts** with shared credentials
+- Optional: **Proxy infrastructure** (residential or datacenter)
 
 ---
 
@@ -50,13 +50,13 @@ Scale your Kiri IDE access by automating account registration and token extracti
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/KIRI-AI.git
+git clone https://github.com/Riz-dev-bit/KIRI-AI.git
 cd KIRI-AI
 
 # Install dependencies
 npm install
 
-# Install Playwright browsers
+# Install browser automation dependencies
 npx playwright install chromium
 ```
 
@@ -72,11 +72,11 @@ cp config/gsuite.example.txt config/gsuite.txt
 cp config/password-gsuite.example.txt config/password-gsuite.txt
 cp config/9router.example.json config/9router.json
 
-# Optional: proxy support
+# Optional: proxy configuration
 cp config/proxy.example.txt config/proxy.txt
 ```
 
-### 2. Edit Configuration
+### 2. Edit Configuration Files
 
 #### **config/gsuite.txt**
 ```
@@ -84,13 +84,13 @@ user1@yourdomain.com
 user2@yourdomain.com
 user3@yourdomain.com
 ```
-*One email per line, no passwords here*
+*One email per line*
 
 #### **config/password-gsuite.txt**
 ```
 YourSharedPassword123
 ```
-*Single line, shared password for all GSuite accounts*
+*Single line, shared credential for all accounts*
 
 #### **config/9router.json**
 ```json
@@ -100,7 +100,7 @@ YourSharedPassword123
   "password": "your_password"
 }
 ```
-*Your 9Router instance credentials (NOT ours - use your own instance)*
+*Your token router instance credentials*
 
 #### **config/proxy.txt** (Optional)
 ```
@@ -108,7 +108,7 @@ http://user:pass@proxy1.example.com:8080
 socks5://user:pass@proxy2.example.com:1080
 http://proxy3.example.com:3128
 ```
-*Multiple proxies = round-robin rotation. Single proxy = reuse (supports rotating residential proxies). Leave empty = no proxy.*
+*Multiple proxies for rotation, or single proxy for pass-through*
 
 ### 3. Gmail Configuration (Coming Soon)
 
@@ -116,11 +116,10 @@ http://proxy3.example.com:3128
 ```
 user1@gmail.com|Password123|JBSWY3DPEHPK3PXP
 user2@gmail.com|AnotherPass|
-user3@gmail.com|SecurePass|MFRGGZDFMZTWQ2LK
 ```
-*Format: `email|password|2fa_secret` (leave 2FA empty if not enabled)*
+*Format: `email|password|2fa_secret` (2FA optional)*
 
-**Note:** Gmail provider is not yet implemented. GSuite only for now. Contributions welcome!
+**Note:** Personal Gmail provider is under development. GSuite only for now.
 
 ---
 
@@ -132,10 +131,10 @@ user3@gmail.com|SecurePass|MFRGGZDFMZTWQ2LK
 # Run with default settings (headless mode)
 npm start
 
-# Run with visible browser (for debugging)
+# Run with visible browser (debugging)
 HEADLESS=false npm start
 
-# Or use the dev script
+# Development mode
 npm run dev
 ```
 
@@ -152,91 +151,73 @@ DELAY_BETWEEN_ACCOUNTS=5000
 ### Validate Configuration
 
 ```bash
-# Run smoke test before starting
+# Run smoke test
 npm test
 ```
 
 ---
 
-## 🔍 How It Works
+## 🔍 Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  1. Load Configuration                                       │
-│     - Read GSuite emails from config/gsuite.txt             │
-│     - Load shared password from config/password-gsuite.txt  │
-│     - Load 9Router credentials from config/9router.json     │
-│     - Load proxies from config/proxy.txt (optional)         │
+│  1. Configuration Loading                                    │
+│     - Read account lists from config files                   │
+│     - Load routing service credentials                       │
+│     - Initialize proxy pool (optional)                       │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│  2. Authenticate with 9Router                                │
-│     - POST /api/auth/login                                   │
-│     - Get auth token for API calls                           │
+│  2. Router Authentication                                    │
+│     - Authenticate with token routing service                │
+│     - Fetch existing token list for deduplication            │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│  3. Fetch Existing Tokens                                    │
-│     - GET /api/oauth/kiro                                    │
-│     - Cache list to avoid duplicate imports                  │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│  4. Per-Account Processing (Sequential)                      │
+│  3. Per-Account Processing Pipeline                          │
 │     ┌──────────────────────────────────────────────────┐    │
-│     │  a. Check if email exists in 9Router             │    │
-│     │     → If exists: SKIP                             │    │
-│     │     → If not: Continue                            │    │
+│     │  a. Deduplication Check                           │    │
+│     │     → Skip if token already exists                │    │
 │     └──────────────────────────────────────────────────┘    │
 │                         ↓                                    │
 │     ┌──────────────────────────────────────────────────┐    │
-│     │  b. Launch Browser (with proxy rotation)         │    │
-│     │     - Chromium + Stealth plugin                   │    │
-│     │     - Anti-automation flags                       │    │
+│     │  b. Browser Launch                                │    │
+│     │     - Chromium with stealth plugins               │    │
+│     │     - Proxy rotation (if configured)              │    │
 │     └──────────────────────────────────────────────────┘    │
 │                         ↓                                    │
 │     ┌──────────────────────────────────────────────────┐    │
-│     │  c. Google SSO Flow                               │    │
-│     │     - Navigate to app.kiro.dev/signin            │    │
-│     │     - Click "Sign in with Google"                │    │
-│     │     - Auto-fill email + password                 │    │
-│     │     - Handle Workspace ToS (if appears)          │    │
-│     │     - Wait for OAuth consent                     │    │
-│     │     - Redirect back to Kiri                      │    │
+│     │  c. OAuth Flow Automation                         │    │
+│     │     - Navigate to SSO endpoint                    │    │
+│     │     - Complete authentication flow                │    │
+│     │     - Handle consent screens                      │    │
 │     └──────────────────────────────────────────────────┘    │
 │                         ↓                                    │
 │     ┌──────────────────────────────────────────────────┐    │
-│     │  d. Extract Refresh Token                        │    │
-│     │     - Scan localStorage for Cognito keys         │    │
-│     │     - Find "refreshToken" key                    │    │
-│     │     - Retry up to 5 times (2s delay)             │    │
+│     │  d. Token Extraction                              │    │
+│     │     - Scan browser storage for OAuth tokens       │    │
+│     │     - Extract refresh token with retry logic      │    │
 │     └──────────────────────────────────────────────────┘    │
 │                         ↓                                    │
 │     ┌──────────────────────────────────────────────────┐    │
-│     │  e. Import to 9Router                             │    │
-│     │     - POST /api/oauth/kiro/import                │    │
-│     │     - {email, refreshToken}                      │    │
-│     └──────────────────────────────────────────────────┘    │
-│                         ↓                                    │
-│     ┌──────────────────────────────────────────────────┐    │
-│     │  f. Close Browser & Wait                          │    │
-│     │     - Clean shutdown                              │    │
-│     │     - Delay before next account (5s default)     │    │
+│     │  e. Token Import                                  │    │
+│     │     - Push to routing service API                 │    │
+│     │     - Update local deduplication cache            │    │
 │     └──────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│  5. Final Summary                                            │
-│     - Total processed / success / failed / skipped          │
-│     - Monthly credits calculation (accounts × 50)           │
+│  4. Summary Report                                           │
+│     - Success / failure / skipped counts                     │
+│     - Performance metrics                                    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Token Lifespan
+### Token Lifecycle
 
-- **Refresh Token Validity**: ~30 days (AWS Cognito default)
+- **Refresh Token Validity**: ~30 days (platform default)
 - **Recommended Refresh Cycle**: Every 20 days
-- **GSuite Limitation**: Expired tokens cannot be renewed automatically (requires re-login)
+- **Note**: Expired tokens require re-authentication
 
 ---
 
@@ -244,43 +225,38 @@ npm test
 
 ### Common Issues
 
-#### 1. `9Router authentication failed`
-- Check `config/9router.json` credentials
-- Verify 9Router instance is running
-- Test manually: `curl http://localhost:20128/api/auth/login -d '{"username":"...","password":"..."}'`
+#### 1. `Router authentication failed`
+- Verify `config/9router.json` credentials
+- Ensure routing service is accessible
+- Test connectivity: `curl http://localhost:20128/api/auth/login`
 
-#### 2. `Google SSO login failed`
-- Password may be incorrect
-- Google may have blocked automation (try different proxy)
-- Workspace admin may have disabled external OAuth apps
-- Try running with `HEADLESS=false` to see what's happening
+#### 2. `OAuth flow failed`
+- Verify account credentials
+- Check for IP/bot detection blocks (try different proxy)
+- Review workspace admin settings for OAuth app restrictions
+- Run with `HEADLESS=false` for visual debugging
 
-#### 3. `Failed to extract refresh token`
-- Token may not be set in localStorage yet (increase retry delay)
-- Kiri may have changed their authentication flow (open an issue)
-- Network timeout (check proxy settings)
+#### 3. `Token extraction failed`
+- Increase retry delay in source code
+- Platform may have changed token storage mechanism
+- Check network connectivity and timeouts
 
-#### 4. `Proxy connection failed`
-- Verify proxy format: `protocol://[user:pass@]host:port`
-- Test proxy manually: `curl -x http://proxy:port https://api.ipify.org`
-- Try without proxy first to isolate the issue
-
-#### 5. Browser hangs or freezes
-- Increase timeout in `src/auth/google-sso.js`
-- Disable headless mode: `HEADLESS=false npm start`
-- Check system resources (RAM, CPU)
+#### 4. `Proxy connection errors`
+- Validate proxy format: `protocol://[user:pass@]host:port`
+- Test proxy independently
+- Try without proxy to isolate issue
 
 ### Debug Mode
 
 ```bash
-# Run with visible browser + detailed logs
+# Visible browser + detailed logs
 HEADLESS=false npm start
 
-# Check configuration validity
+# Configuration validation
 npm test
 
-# Manual test with single account
-# Edit config/gsuite.txt to contain only 1 account, then run
+# Single account test
+# (Edit config to contain only 1 account, then run)
 npm start
 ```
 
@@ -291,10 +267,10 @@ npm start
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ### Priority Areas
-- **Gmail Provider** - Handle personal Google accounts with 2FA
-- **Enhanced Error Recovery** - Resume from failures, retry strategies
-- **Testing** - Unit tests, integration tests, CI/CD
-- **Documentation** - Video tutorials, architecture diagrams
+- **Gmail Provider** - Personal account support with 2FA
+- **Enhanced Error Recovery** - Resume capabilities, retry strategies
+- **Testing** - Unit tests, integration tests, CI/CD pipeline
+- **Documentation** - Video tutorials, architecture deep-dives
 
 ---
 
@@ -302,11 +278,11 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 This tool is provided for **educational and research purposes only**.
 
-- **Terms of Service**: Automated account creation may violate Google's and Kiri AI's Terms of Service. Use at your own risk.
-- **Account Security**: The authors are not responsible for suspended accounts, security breaches, or data loss.
-- **Ethical Use**: Ensure you have proper authorization before automating account operations. Verify compliance with applicable laws and regulations in your jurisdiction.
+- **Terms of Service**: Automated account operations may violate service provider Terms of Service. Use at your own risk.
+- **Account Security**: The authors are not responsible for account suspensions, security breaches, or data loss.
+- **Ethical Use**: Ensure you have proper authorization before automating authentication workflows. Verify compliance with applicable laws and regulations.
 - **No Warranty**: This software is provided "as is" without warranty of any kind, express or implied.
-- **9Router Requirement**: This tool requires your own 9Router instance. We do not provide 9Router hosting or credentials.
+- **Self-Hosted Requirements**: This tool requires your own token routing infrastructure. We do not provide hosting or credentials.
 
 **By using this tool, you acknowledge that you understand and accept these risks.**
 
@@ -320,19 +296,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **9Router**: [Configure your own instance](https://9router.example.com/docs)
-- **Kiri IDE**: [https://kiro.dev](https://kiro.dev)
-- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/KIRI-AI/issues)
+- **Issues**: [GitHub Issues](https://github.com/Riz-dev-bit/KIRI-AI/issues)
 - **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
-## 📊 Project Stats
+## 📊 Technical Specifications
 
-- **Credits per account**: 50/month
-- **Average processing time**: 30-60 seconds per account
-- **Success rate**: ~95% (with proper configuration)
-- **Supported authentication**: GSuite only (Gmail coming soon)
+- **Processing time**: 30-60 seconds per account (average)
+- **Success rate**: ~95% with proper configuration
+- **Supported authentication**: Google Workspace (GSuite)
+- **Browser engine**: Chromium via Playwright
+- **Anti-detection**: Stealth plugins + custom flags
 
 ---
 
