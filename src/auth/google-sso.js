@@ -20,8 +20,9 @@ class GoogleSSOHandler {
     try {
       logger.info(`Authenticating: ${email}`);
 
-      // Navigate to Kiri signin page
-      await page.goto('https://app.kiro.dev/signin', { 
+      // Navigate to target service signin page
+      const TARGET_URL = process.env.TARGET_URL || 'https://app.kiro.dev/signin';
+      await page.goto(TARGET_URL, { 
         waitUntil: 'networkidle',
         timeout: 30000 
       });
@@ -57,8 +58,8 @@ class GoogleSSOHandler {
       // Handle Google Workspace ToS (if appears)
       await this.handleWorkspaceToS(page);
 
-      // Wait for OAuth consent and redirect to Kiri
-      await this.waitForKiriRedirect(page);
+      // Wait for OAuth consent and redirect back to service
+      await this.waitForServiceRedirect(page);
 
       logger.success(`Login successful: ${email}`);
       return true;
@@ -114,15 +115,16 @@ class GoogleSSOHandler {
   }
 
   /**
-   * Wait for redirect back to Kiri after OAuth
+   * Wait for redirect back to service after OAuth
    * @private
    */
-  async waitForKiriRedirect(page) {
+  async waitForServiceRedirect(page) {
     try {
-      logger.info('Waiting for OAuth consent and Kiri redirect...');
+      logger.info('Waiting for OAuth consent and service redirect...');
 
-      // Wait for Kiri domain
-      await page.waitForURL('**/app.kiro.dev/**', { 
+      // Wait for service domain (configurable)
+      const TARGET_DOMAIN = process.env.TARGET_DOMAIN || '**/app.kiro.dev/**';
+      await page.waitForURL(TARGET_DOMAIN, { 
         timeout: 60000,
         waitUntil: 'networkidle'
       });
@@ -130,9 +132,9 @@ class GoogleSSOHandler {
       // Additional wait for token to be set in localStorage
       await page.waitForTimeout(3000);
 
-      logger.success('Redirected to Kiri successfully');
+      logger.success('OAuth redirect successful');
     } catch (error) {
-      logger.error('Timeout waiting for Kiri redirect', { error: error.message });
+      logger.error('Timeout waiting for service redirect', { error: error.message });
       throw error;
     }
   }

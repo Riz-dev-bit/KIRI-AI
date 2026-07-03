@@ -1,7 +1,7 @@
 /**
- * KIRI-AI - Automated Kiri IDE Account Provisioning
+ * KIRI-AI - Automated OAuth Token Management
  * 
- * Main entry point for token extraction and 9Router import
+ * Main entry point for token extraction and router import
  */
 
 require('dotenv').config();
