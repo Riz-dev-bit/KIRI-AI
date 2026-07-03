@@ -5,22 +5,22 @@
 const fs = require('fs');
 const path = require('path');
 
-const configDir = path.join(process.cwd());
+const rootDir = path.join(__dirname, '../..');
 
 const tests = [
   {
     name: 'Config directory exists',
-    check: () => fs.existsSync(configDir)
+    check: () => fs.existsSync(rootDir)
   },
   {
     name: '9Router config exists',
-    check: () => fs.existsSync(path.join(configDir, '9router.json'))
+    check: () => fs.existsSync(path.join(rootDir, '9router.json'))
   },
   {
     name: '9Router config is valid JSON',
     check: () => {
       try {
-        const config = JSON.parse(fs.readFileSync(path.join(configDir, '9router.json'), 'utf-8'));
+        const config = JSON.parse(fs.readFileSync(path.join(rootDir, '9router.json'), 'utf-8'));
         return config.endpoint && config.password;
       } catch {
         return false;
@@ -30,17 +30,17 @@ const tests = [
   {
     name: 'At least one account source exists (gsuite.txt or gmail.txt)',
     check: () => {
-      const gsuiteExists = fs.existsSync(path.join(configDir, 'gsuite.txt'));
-      const gmailExists = fs.existsSync(path.join(configDir, 'gmail.txt'));
+      const gsuiteExists = fs.existsSync(path.join(rootDir, 'gsuite.txt'));
+      const gmailExists = fs.existsSync(path.join(rootDir, 'gmail.txt'));
       return gsuiteExists || gmailExists;
     }
   },
   {
     name: 'GSuite password exists if gsuite.txt exists',
     check: () => {
-      const gsuiteExists = fs.existsSync(path.join(configDir, 'gsuite.txt'));
+      const gsuiteExists = fs.existsSync(path.join(rootDir, 'gsuite.txt'));
       if (!gsuiteExists) return true; // Not applicable
-      return fs.existsSync(path.join(configDir, 'password-gsuite.txt'));
+      return fs.existsSync(path.join(rootDir, 'password-gsuite.txt'));
     }
   }
 ];
