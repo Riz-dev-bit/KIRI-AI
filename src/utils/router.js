@@ -71,16 +71,30 @@ class RouterClient {
     try {
       logger.info('Authenticating with router...');
       
-      const response = await this._request('POST', '/api/auth/login', {
-        password: this.password
+      const response = await fetch(`${this.endpoint}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: this.password })
       });
 
-      this.authToken = response.token || response.access_token;
-      
-      if (!this.authToken) {
-        throw new Error('No token in authentication response');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || `HTTP ${response.status}`);
       }
 
+      // Token is in Set-Cookie header, not response body
+      const setCookie = response.headers.get('set-cookie');
+      if (!setCookie) {
+        throw new Error('No auth_token cookie in response');
+      }
+
+      // Extract auth_token from Set-Cookie header
+      const tokenMatch = setCookie.match(/auth_token=([^;]+)/);
+      if (!tokenMatch) {
+        throw new Error('Could not parse auth_token from cookie');
+      }
+
+      this.authToken = tokenMatch[1];
       logger.success('Router authentication successful');
       return this.authToken;
     } catch (error) {
