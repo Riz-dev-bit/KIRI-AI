@@ -100,7 +100,7 @@ YourSharedPassword123
   "password": "your_password"
 }
 ```
-*Your token router instance credentials*
+*Your 9Router instance credentials*
 
 #### **config/proxy.txt** (Optional)
 ```
