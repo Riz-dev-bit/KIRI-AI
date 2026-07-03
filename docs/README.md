@@ -46,24 +46,28 @@ Streamline OAuth token management for cloud development environments using Googl
 
 ---
 
-## 🛠️ Installation
+## Quick Start
 
 ```bash
-# Clone the repository
+# 1. Clone repository
 git clone https://github.com/Riz-dev-bit/KIRI-AI.git
 cd KIRI-AI
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Install browser automation dependencies
-npx playwright install chromium
+# 3. Configure accounts
+nano gsuite.txt           # Add GSuite emails (one per line)
+nano password-gsuite.txt  # Add shared password
+nano 9router.json         # Configure 9Router endpoint
+
+# 4. Extract tokens
+node index.js             # Outputs to kiro-tokens.json
+
+# 5. Auto-import to 9Router
+node import-to-9router.js # Injects directly to database
+pkill -f 9router && 9router  # Restart 9Router to reload
 ```
-
----
-
-## ⚙️ Configuration
-
 ### 1. Create Configuration Files
 
 ```bash
