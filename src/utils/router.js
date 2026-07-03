@@ -92,7 +92,7 @@ class RouterClient {
   }
 
   /**
-   * Get existing Kiri tokens from 9Router
+   * Get existing tokens from router
    * @returns {Promise<Array<{email: string, refreshToken: string}>>}
    */
   async getExistingTokens() {
@@ -101,7 +101,8 @@ class RouterClient {
         await this.authenticate();
       }
 
-      const response = await this._request('GET', '/api/oauth/kiro', null, this.authToken);
+      const ROUTER_ENDPOINT = process.env.ROUTER_OAUTH_ENDPOINT || '/api/oauth/kiro';
+      const response = await this._request('GET', ROUTER_ENDPOINT, null, this.authToken);
       
       // Response format may vary - handle both array and object with data property
       const tokens = Array.isArray(response) ? response : (response.data || []);
@@ -127,9 +128,9 @@ class RouterClient {
   }
 
   /**
-   * Import refresh token to 9Router
+   * Import refresh token to router
    * @param {string} email - Account email
-   * @param {string} refreshToken - Kiri refresh token
+   * @param {string} refreshToken - OAuth refresh token
    * @returns {Promise<boolean>} True if successful
    */
   async importToken(email, refreshToken) {
@@ -138,7 +139,8 @@ class RouterClient {
         await this.authenticate();
       }
 
-      await this._request('POST', '/api/oauth/kiro/import', {
+      const ROUTER_IMPORT_ENDPOINT = process.env.ROUTER_IMPORT_ENDPOINT || '/api/oauth/kiro/import';
+      await this._request('POST', ROUTER_IMPORT_ENDPOINT, {
         email,
         refreshToken
       }, this.authToken);

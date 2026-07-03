@@ -1,5 +1,5 @@
 /**
- * Extract Kiri refresh token from browser context
+ * Extract OAuth refresh token from browser context
  */
 
 const Logger = require('../utils/logger');
@@ -17,7 +17,7 @@ class TokenExtractor {
       logger.info('Extracting token from localStorage...');
 
       const refreshToken = await page.evaluate(() => {
-        // Kiri uses AWS Cognito - scan for Cognito keys
+        // Target service uses AWS Cognito - scan for Cognito keys
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
           if (key && key.includes('CognitoIdentityServiceProvider') && key.includes('refreshToken')) {
